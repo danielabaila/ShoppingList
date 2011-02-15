@@ -14,6 +14,7 @@ DbManager.prototype.initialize = function() {
     this.createTestData();
 }
 
+// get db
 DbManager.prototype.getDatabase = function(){
     this.db = openDatabaseSync("ShoppingList", "1.0", "Shopping List Database", 100000);
     return true;
