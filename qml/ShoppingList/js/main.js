@@ -51,18 +51,19 @@ function generateItemsModel(list_id) {
 
     for(var i = 0; i < res.rows.length; i++) {
         qmlObjectString += 'ListElement {';
-        qmlObjectString += 'itemId: "'            + res.rows.item(i).item_id + '" ; ';
-        qmlObjectString += 'itemListId: "'        + res.rows.item(i).item_list_id + '" ; ';
-        qmlObjectString += 'itemName: "'          + res.rows.item(i).list_name + '"; ';
-        qmlObjectString += 'itemMeasuringUnit: "' + res.rows.item(i).item_measuring_unit + '"; ';
-        qmlObjectString += 'itemPrice: "'         + res.rows.item(i).item_price + '"; ';
-        qmlObjectString += 'itemCurrency: "'      + res.rows.item(i).item_checked + '"; ';
-        qmlObjectString += 'itemTimestamp: "'     + res.rows.item(i).item_timestamp + '"; ';
+        qmlObjectString += 'productId: "'        + res.rows.item(i).item_id + '" ; ';
+        qmlObjectString += 'productListId: "'    + res.rows.item(i).item_list_id + '" ; ';
+        qmlObjectString += 'productName: "'      + res.rows.item(i).item_name + '"; ';
+        qmlObjectString += 'productQuantity: "'  + res.rows.item(i).item_quantity + '"; ';
+        qmlObjectString += 'productMU: "'        + res.rows.item(i).item_measuring_unit + '"; ';
+        qmlObjectString += 'productPrice: "'     + res.rows.item(i).item_price + '"; ';
+        qmlObjectString += 'productCurrency: "'  + res.rows.item(i).item_checked + '"; ';
+        qmlObjectString += 'productTimestamp: "' + res.rows.item(i).item_timestamp + '"; ';
         qmlObjectString += '}';
     }
     qmlObjectString += '}';
 
-    return Qt.createQmlObject(qmlObjectString, parentId, "dynamicItemsInList");
+    return Qt.createQmlObject(qmlObjectString, shoppingLists, "dynamicItemsInList");
 }
 
 
