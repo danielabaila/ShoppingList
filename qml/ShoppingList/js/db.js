@@ -407,6 +407,7 @@ DbManager.prototype.createTestData = function() {
     this.setItemData("Coca-cola", "2.5", "l", "4.5", 0, 1);
     this.setItemData("Crisps", "50", "gr", "3", 1, 1);
     this.setItemData("Chips", "80", "gr", "6.2", 0, 1);
+    this.setItemData("Meat", "800", "gr", "14.6", 1, 1);
 
     this.setItemData("Chocolate", "100", "gr", "3.5", 0, 2);
     this.setItemData("Coca-cola", "2.5", "l", "4.5", 0, 2);

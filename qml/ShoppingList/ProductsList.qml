@@ -1,6 +1,7 @@
 import QtQuick 1.0
 import "models"
 import "templates"
+import "js/main.js" as MainManager
 
 Item {
     id: productsListContainer
@@ -20,7 +21,7 @@ Item {
     ListView {
         id: shoppingLists
         height: parent.height; width: parent.width
-        model: ProductsItemsModel{}
+        model: MainManager.generateItemsModel(1);
         delegate: productsSection
 
         states: [
