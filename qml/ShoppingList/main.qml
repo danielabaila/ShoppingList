@@ -55,7 +55,7 @@ Rectangle {
             name: "shoppingListState"
             PropertyChanges {
                 target: contentItem
-                source: "ShoppingLists.qml"
+                source: "ProductsList.qml"
             }
         }
     ]
@@ -65,7 +65,6 @@ Rectangle {
             from: "*"; to: "*"
             //NumberAnimation { properties: "x"; easing.type: Easing.InOutQuad; duration: 2000 }
             SequentialAnimation {
-                running: true
                 NumberAnimation { target: contentArea; property: "x"; to: -360; easing.type: Easing.OutBounce; duration: 200 }
                 NumberAnimation { target: contentArea; property: "x"; to: 360; duration: 0 }
                 NumberAnimation { target: contentArea; property: "x"; to: 0; easing.type: Easing.InBounce; duration: 100 }
