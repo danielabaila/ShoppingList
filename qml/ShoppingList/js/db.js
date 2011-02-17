@@ -25,7 +25,7 @@ DbManager.prototype.createTables = function () {
                 function(tx) {
                     tx.executeSql('CREATE TABLE IF NOT EXISTS icons(icon_id INTEGER UNIQUE, icon_path TEXT)');
                     tx.executeSql('CREATE TABLE IF NOT EXISTS lists(list_id INTEGER UNIQUE, list_icon_id INTEGER, list_name TEXT, list_location TEXT, list_timestamp TEXT)');
-                    tx.executeSql('CREATE TABLE IF NOT EXISTS items(item_id INTEGER UNIQUE, item_list_id INTEGER, item_name TEXT, item_quantity INTEGER, item_measuring_unit TEXT, item_price FLOAT(2), item_checked BOOLEAN, item_timestamp TEXT)');
+                    tx.executeSql('CREATE TABLE IF NOT EXISTS items(item_id INTEGER UNIQUE, item_list_id INTEGER, item_name TEXT, item_quantity FLOAT(2), item_measuring_unit TEXT, item_price FLOAT(2), item_checked BOOLEAN, item_timestamp TEXT)');
                     tx.executeSql('CREATE TABLE IF NOT EXISTS settings(setting_id INTEGER UNIQUE DEFAULT 1, metric INTEGER, currency INTEGER)');
                     tx.executeSql('CREATE TABLE IF NOT EXISTS last_ids (id INTEGER UNIQUE, last_list_id INTEGER DEFAULT 0, last_item_id INTEGER DEFAULT 0, last_icon_id INTEGER DEFAULT 0)');
                 });
@@ -402,5 +402,25 @@ DbManager.prototype.createTestData = function() {
     this.setListData("Test list test list 2", "Location", 2);
     this.setListData("Test list 3",           "Location", 3);
     this.setListData("Test list 4",           "Location", 4);
+
+    this.setItemData("Chocolate", "100", "gr", "3.5", 0, 1);
+    this.setItemData("Coca-cola", "2.5", "l", "4.5", 0, 1);
+    this.setItemData("Crisps", "50", "gr", "3", 1, 1);
+    this.setItemData("Chips", "80", "gr", "6.2", 0, 1);
+
+    this.setItemData("Chocolate", "100", "gr", "3.5", 0, 2);
+    this.setItemData("Coca-cola", "2.5", "l", "4.5", 0, 2);
+    this.setItemData("Crisps", "50", "gr", "3", 1, 2);
+    this.setItemData("Chips", "80", "gr", "6.2", 0, 2);
+
+    this.setItemData("Chocolate", "100", "gr", "3.5", 0, 3);
+    this.setItemData("Coca-cola", "2.5", "l", "4.5", 0, 3);
+    this.setItemData("Crisps", "50", "gr", "3", 1, 3);
+    this.setItemData("Chips", "80", "gr", "6.2", 0, 3);
+
+    this.setItemData("Chocolate", "100", "gr", "3.5", 0, 4);
+    this.setItemData("Coca-cola", "2.5", "l", "4.5", 0, 4);
+    this.setItemData("Crisps", "50", "gr", "3", 1, 4);
+    this.setItemData("Chips", "80", "gr", "6.2", 0, 4);
 }
 

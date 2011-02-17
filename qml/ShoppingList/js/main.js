@@ -53,7 +53,7 @@ function generateItemsModel(list_id) {
         qmlObjectString += 'ListElement {';
         qmlObjectString += 'itemId: "'            + res.rows.item(i).item_id + '" ; ';
         qmlObjectString += 'itemListId: "'        + res.rows.item(i).item_list_id + '" ; ';
-        qmlObjectString += 'itemName: "'          + res.rows.item(i).list_name + '"; ';
+        qmlObjectString += 'itemName: "'          + res.rows.item(i).item_name + '"; ';
         qmlObjectString += 'itemMeasuringUnit: "' + res.rows.item(i).item_measuring_unit + '"; ';
         qmlObjectString += 'itemPrice: "'         + res.rows.item(i).item_price + '"; ';
         qmlObjectString += 'itemCurrency: "'      + res.rows.item(i).item_checked + '"; ';
@@ -62,7 +62,7 @@ function generateItemsModel(list_id) {
     }
     qmlObjectString += '}';
 
-    return Qt.createQmlObject(qmlObjectString, parentId, "dynamicItemsInList");
+    return Qt.createQmlObject(qmlObjectString, shoppingLists, "dynamicItemsInList");
 }
 
 
