@@ -7,6 +7,7 @@ Rectangle {
     height: 80
     color: "#0D1B1E26"
 
+    property int iId
     property alias  name: listItemNameText.text
     property alias  icon: listItemIcon.source
     property alias  price: priceText.text
