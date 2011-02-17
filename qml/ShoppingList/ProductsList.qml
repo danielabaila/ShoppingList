@@ -9,11 +9,12 @@ Item {
          id: productsSection
 
          ProductItem {
-             name: productName
-             price: productPrice
-             currency: productCurrency
-             quantity: productQuantity
-             mu: productMU
+            checkState: productState
+            name: productName
+            price: productPrice
+            currency: productCurrency
+            quantity: productQuantity
+            mu: productMU
          }
     }
 

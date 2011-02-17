@@ -32,13 +32,31 @@ Rectangle {
         y: 90
 
         Button {
-            buttonText: "Delete"
+            buttonText: "Edit"
             buttonWidth: 80
+
+            MouseArea {
+                anchors.fill: parent
+
+                onClicked: {
+                    //TODO: go to edit screen
+                }
+            }
         }
 
         Button {
-            buttonText: "Details"
+            buttonText: "Delete"
             buttonWidth: 80
+
+            MouseArea {
+                anchors.fill: parent
+
+                onClicked: {
+                    listItem.height = 0
+                    listItem.visible = false
+                    //TODO: JS delete function
+                }
+            }
         }
     }
 
