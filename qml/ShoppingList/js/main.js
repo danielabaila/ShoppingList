@@ -57,8 +57,9 @@ function generateItemsModel(list_id) {
         qmlObjectString += 'productQuantity: "'  + res.rows.item(i).item_quantity + '"; ';
         qmlObjectString += 'productMU: "'        + res.rows.item(i).item_measuring_unit + '"; ';
         qmlObjectString += 'productPrice: "'     + res.rows.item(i).item_price + '"; ';
-        qmlObjectString += 'productCurrency: "'  + res.rows.item(i).item_checked + '"; ';
+        qmlObjectString += 'productCurrency: "'  + res.rows.item(i).item_currency + '"; ';
         qmlObjectString += 'productTimestamp: "' + res.rows.item(i).item_timestamp + '"; ';
+        qmlObjectString += 'productState: "' + res.rows.item(i).item_checked + '"; ';
         qmlObjectString += '}';
     }
     qmlObjectString += '}';
