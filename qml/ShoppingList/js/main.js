@@ -16,6 +16,7 @@ function generateListItemsModel() {
     var qmlObjectString = 'import QtQuick 1.0;';
     qmlObjectString += 'ListModel {';
 
+
     var res = dbManager.getLists();
     if (res == "error") {
         return;

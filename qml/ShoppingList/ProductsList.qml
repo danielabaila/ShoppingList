@@ -22,7 +22,7 @@ Item {
     ListView {
         id: shoppingLists
         height: parent.height; width: parent.width
-        model: MainManager.generateItemsModel(1);
+        model: MainManager.generateItemsModel(mainContainer.listIdMain);
         delegate: productsSection
 
         states: [

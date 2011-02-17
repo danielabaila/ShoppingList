@@ -8,6 +8,8 @@ Rectangle {
     width: 360
     height: 640
 
+    property int listIdMain: 0
+
     FontLoader { id: nokiaStandard; source: "fonts/Nokia Standard v1.1.otf" }
 
     Image {

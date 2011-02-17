@@ -14,6 +14,18 @@ Item {
              price: itemPrice
              icon: itemIcon
              currency: itemCurrency
+
+             height: 80; width: 360
+
+             Component.onCompleted: iId = itemId
+
+             MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    mainContainer.listIdMain = iId;
+                    mainContainer.state = "shoppingListState"
+                }
+             }
          }
     }
 
