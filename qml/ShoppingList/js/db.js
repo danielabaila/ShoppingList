@@ -26,7 +26,7 @@ DbManager.prototype.createTables = function () {
                     tx.executeSql('CREATE TABLE IF NOT EXISTS icons(icon_id INTEGER UNIQUE, icon_path TEXT)');
                     tx.executeSql('CREATE TABLE IF NOT EXISTS lists(list_id INTEGER UNIQUE, list_icon_id INTEGER, list_name TEXT, list_location TEXT, list_timestamp TEXT)');
                     tx.executeSql('CREATE TABLE IF NOT EXISTS items(item_id INTEGER UNIQUE, item_list_id INTEGER, item_name TEXT, item_quantity FLOAT(2), item_measuring_unit TEXT, item_price FLOAT(2), item_checked BOOLEAN, item_timestamp TEXT)');
-                    tx.executeSql('CREATE TABLE IF NOT EXISTS settings(setting_id INTEGER UNIQUE DEFAULT 1, metric INTEGER, currency INTEGER)');
+                    tx.executeSql('CREATE TABLE IF NOT EXISTS settings(setting_id INTEGER UNIQUE DEFAULT 1, metric TEXT, currency TEXT)');
                     tx.executeSql('CREATE TABLE IF NOT EXISTS last_ids (id INTEGER UNIQUE, last_list_id INTEGER DEFAULT 0, last_item_id INTEGER DEFAULT 0, last_icon_id INTEGER DEFAULT 0)');
                 });
 }
@@ -328,7 +328,7 @@ DbManager.prototype.getItemsInList = function(list_id) {
 
     this.db.transaction(
                 function(tx) {
-                    var rs = tx.executeSql('SELECT * FROM items WHERE item_list_id = ?;', [list_id]);
+                    var rs = tx.executeSql('SELECT items.*, currency AS item_currency FROM items, settings WHERE items.item_list_id = ?;', [list_id]);
                     if (rs.rows.length > 0) {
                         res = rs;
                     } else {
@@ -344,7 +344,7 @@ DbManager.prototype.getLists = function() {
 
     this.db.transaction(
                 function(tx) {
-                    var rs = tx.executeSql('SELECT * FROM lists LEFT JOIN icons ON lists.list_icon_id = icons.icon_id');
+                    var rs = tx.executeSql('SELECT lists.*, icon_path, currency FROM settings, lists LEFT JOIN icons ON lists.list_icon_id = icons.icon_id');
                     if (rs.rows.length > 0) {
                         res = rs;
                     } else {
@@ -383,6 +383,8 @@ DbManager.prototype.initializeLastIds = function() {
 
 
 DbManager.prototype.createTestData = function() {
+    this.setSettingsData("imperial", "$");
+
     this.setIconData("images/icons/01.png");
     this.setIconData("images/icons/02.png");
     this.setIconData("images/icons/03.png");

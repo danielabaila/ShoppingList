@@ -29,7 +29,7 @@ function generateListItemsModel() {
         qmlObjectString += 'itemLocation: "'  + res.rows.item(i).list_location + '"; ';
         qmlObjectString += 'itemIcon: "'      + res.rows.item(i).icon_path + '"; ';
         qmlObjectString += 'itemPrice: "'     + ' 100 ' + '"; ';
-        qmlObjectString += 'itemCurrency: "'  + '$' + '"; ';
+        qmlObjectString += 'itemCurrency: "'  + res.rows.item(i).currency + '"; ';
         qmlObjectString += 'itemTimestamp: "' + res.rows.item(i).item_timestamp + '"; ';
         qmlObjectString += '}';
     }
