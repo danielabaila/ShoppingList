@@ -114,3 +114,15 @@ function generateIconsModel() {
 
     return Qt.createQmlObject(qmlObjectString, parentId, "dynamicIconsList");
 }
+
+//Delete item from list
+function deleteItemFromList(item_id) {
+    var res = dbManager.removeItemFromList(item_id);
+    if (res == "error") return;
+}
+
+//Mark item in list as checked/unchecked - checked = {0,1}
+function checkItem(checked, item_id) {
+    var res = dbManager.checkItem(checked, item_id);
+    if (res == "error") return;
+}

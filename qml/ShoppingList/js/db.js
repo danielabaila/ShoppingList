@@ -357,6 +357,7 @@ DbManager.prototype.getLists = function() {
 
 
 DbManager.prototype.checkItem = function(checked, item_id) {
+    var res;
     this.db.transaction(
                 function(tx) {
                     var rs = tx.executeSql('UPDATE items SET item_checked = ? WHERE item_id = ?;', [checked, item_id]);
@@ -377,6 +378,22 @@ DbManager.prototype.initializeLastIds = function() {
                 function(tx) {
                    tx.executeSql('INSERT INTO last_ids VALUES (1, 0, 0, 0);');
                 });
+    return true;
+}
+
+
+DbManager.prototype.removeItemFromList = function(item_id) {
+    var res;
+    this.db.transaction(
+             function(tx) {
+                 var rs = tx.executeSql('DELETE FROM items WHERE item_id = ?;', [item_id]);
+                 if (rs.rowsAffected > 0) {
+                     res = "OK";
+                 } else {
+                     res = "error";
+                     console.log("ERROR - could not delete item " + item_id);
+                 }
+             });
     return true;
 }
 
