@@ -424,7 +424,7 @@ DbManager.prototype.removeList = function(list_id) {
 
 DbManager.prototype.createTestData = function() {
     // Settings
-    this.setSettingsData("imperial", "USD");
+    this.setSettingsData("imperial", "RON");
 
     // Icons
     this.setIconData("images/icons/01.png");
@@ -517,5 +517,6 @@ DbManager.prototype.createTestData = function() {
     this.setItemData("Salt", "50", "gr", "0.75", 1, 12);
     this.setItemData("Sugar", "500", "gr", "2.2", 0, 12);
     this.setItemData("Condiments pack", "1", "pkg", "23", 0, 12);
+    this.setItemData("John's magazine", "1", "pc", "13", 0, 12);
 }
 
