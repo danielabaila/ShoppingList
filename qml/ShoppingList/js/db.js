@@ -24,8 +24,8 @@ DbManager.prototype.createTables = function () {
     this.db.transaction(
                 function(tx) {
                     tx.executeSql('CREATE TABLE IF NOT EXISTS icons(icon_id INTEGER UNIQUE, icon_path TEXT)');
-                    tx.executeSql('CREATE TABLE IF NOT EXISTS lists(list_id INTEGER UNIQUE, list_icon_id INTEGER, list_name TEXT, list_location TEXT, list_timestamp TEXT)');
-                    tx.executeSql('CREATE TABLE IF NOT EXISTS items(item_id INTEGER UNIQUE, item_list_id INTEGER, item_name TEXT, item_quantity FLOAT(2), item_measuring_unit TEXT, item_price FLOAT(2), item_checked BOOLEAN, item_timestamp TEXT)');
+                    tx.executeSql('CREATE TABLE IF NOT EXISTS lists(list_id INTEGER UNIQUE, list_icon_id INTEGER, list_name TEXT, list_location TEXT, list_timestamp DATETIME)');
+                    tx.executeSql('CREATE TABLE IF NOT EXISTS items(item_id INTEGER UNIQUE, item_list_id INTEGER, item_name TEXT, item_quantity FLOAT(2), item_measuring_unit TEXT, item_price FLOAT(2), item_checked BOOLEAN, item_timestamp DATETIME)');
                     tx.executeSql('CREATE TABLE IF NOT EXISTS settings(setting_id INTEGER UNIQUE DEFAULT 1, metric TEXT, currency TEXT)');
                     tx.executeSql('CREATE TABLE IF NOT EXISTS last_ids (id INTEGER UNIQUE, last_list_id INTEGER DEFAULT 0, last_item_id INTEGER DEFAULT 0, last_icon_id INTEGER DEFAULT 0)');
                 });
@@ -62,8 +62,9 @@ DbManager.prototype.createList = function(name, location, icon_id) {
         this.db.transaction(
                     function(tx) {
                         list_id++;
-                        var timestamp = new Date();
-                        tx.executeSql('INSERT INTO lists VALUES (?, ?, ?, ?, ?);', [list_id, icon_id, name, location, timestamp]);                        
+                        var timestamp = new Date().getTime();
+                        //timestamp = timestamp.getFullYear() + "-" + (timestamp.getMonth()+1) + "-" + timestamp.getDate() + " " + timestamp.getHours() + ":" + timestamp.getMinutes() + ":" + timestamp.getSeconds();
+                        tx.executeSql('INSERT INTO lists VALUES (?, ?, ?, ?, ?);', [list_id, icon_id, name, location, timestamp]);
                     });
         this.incrementLastListId();
         return true;
@@ -74,7 +75,7 @@ DbManager.prototype.createList = function(name, location, icon_id) {
 
 DbManager.prototype.updateList = function(name, location, icon_id, list_id) {
     var res = "";
-    var timestamp = new Date();
+    var timestamp = new Date().getTime();
     this.db.transaction(
                 function(tx) {
                     var rs = tx.executeSql('UPDATE lists SET list_name = ?, list_location = ?, list_icon_id = ? , list_timestamp = ? WHERE list_id = ?;', [name, location, icon_id, timestamp, list_id]);
@@ -280,7 +281,7 @@ DbManager.prototype.createItem = function(name, quantity, measuring_unit, price,
         this.db.transaction(
                     function(tx) {
                         item_id++;
-                        var timestamp = new Date();
+                        var timestamp = new Date().getTime();
                         tx.executeSql('INSERT INTO items VALUES (?, ?, ?, ?, ?, ?, ?, ?);', [item_id, list_id, name, quantity, measuring_unit, price, checked, timestamp]);                        
                     });
         this.incrementLastItemId();
@@ -291,7 +292,7 @@ DbManager.prototype.createItem = function(name, quantity, measuring_unit, price,
 }
 
 DbManager.prototype.updateItemData = function(name, quantity, measuring_unit, price, checked, list_id, item_id) {
-    var timestamp = new Date();
+    var timestamp = new Date().getTime();
     this.db.transaction(
                 function(tx) {
                     var rs = tx.executeSql('UPDATE items SET item_name = ?, item_quantity = ?, item_measuring_unit = ?, item_price = ?, item_checked = ?, item_timestamp = ? WHERE item_id = ?;', [name, quantity, measuring_unit, price, checked, timestamp, item_id]);
@@ -328,7 +329,7 @@ DbManager.prototype.getItemsInList = function(list_id) {
 
     this.db.transaction(
                 function(tx) {
-                    var rs = tx.executeSql('SELECT items.*, currency AS item_currency FROM items, settings WHERE items.item_list_id = ?;', [list_id]);
+                    var rs = tx.executeSql('SELECT items.*, currency AS item_currency FROM items, settings WHERE items.item_list_id = ? ORDER BY item_timestamp ASC;', [list_id]);
                     if (rs.rows.length > 0) {
                         res = rs;
                     } else {
@@ -344,7 +345,7 @@ DbManager.prototype.getLists = function() {
 
     this.db.transaction(
                 function(tx) {
-                    var rs = tx.executeSql('SELECT lists.*, icon_path, currency FROM settings, lists LEFT JOIN icons ON lists.list_icon_id = icons.icon_id');
+                    var rs = tx.executeSql('SELECT lists.*, icon_path, currency FROM settings, lists LEFT JOIN icons ON lists.list_icon_id = icons.icon_id ORDER BY list_timestamp DESC');
                     if (rs.rows.length > 0) {
                         res = rs;
                     } else {
@@ -422,13 +423,16 @@ DbManager.prototype.removeList = function(list_id) {
 
 
 DbManager.prototype.createTestData = function() {
-    this.setSettingsData("imperial", "$");
+    // Settings
+    this.setSettingsData("imperial", "USD");
 
+    // Icons
     this.setIconData("images/icons/01.png");
     this.setIconData("images/icons/02.png");
     this.setIconData("images/icons/03.png");
     this.setIconData("images/icons/04.png");
 
+    // Lists
     this.setListData("Test list 1",           "Location", 1);
     this.setListData("Test list test list 2", "Location", 2);
     this.setListData("Test list 3",           "Location", 3);
@@ -444,25 +448,74 @@ DbManager.prototype.createTestData = function() {
     this.setListData("Test list 3",           "Location", 3);
     this.setListData("Test list 4",           "Location", 4);
 
+    // Items per list
     this.setItemData("Chocolate", "100", "gr", "3.5", 0, 1);
     this.setItemData("Coca-cola", "2.5", "l", "4.5", 0, 1);
     this.setItemData("Crisps", "50", "gr", "3", 1, 1);
     this.setItemData("Chips", "80", "gr", "6.2", 0, 1);
     this.setItemData("Meat", "800", "gr", "14.6", 1, 1);
 
-    this.setItemData("Chocolate", "100", "gr", "3.5", 0, 2);
-    this.setItemData("Coca-cola", "2.5", "l", "4.5", 0, 2);
-    this.setItemData("Crisps", "50", "gr", "3", 1, 2);
-    this.setItemData("Chips", "80", "gr", "6.2", 0, 2);
+    this.setItemData("Cocoa", "100", "gr", "3.5", 0, 2);
+    this.setItemData("Beer", "2.5", "l", "4.5", 0, 2);
+    this.setItemData("Olives", "50", "gr", "3", 1, 2);
+    this.setItemData("Peanuts", "80", "gr", "6.2", 0, 2);
+    this.setItemData("Olive oil", "1", "l", "14.5", 0, 2);
 
-    this.setItemData("Chocolate", "100", "gr", "3.5", 0, 3);
-    this.setItemData("Coca-cola", "2.5", "l", "4.5", 0, 3);
-    this.setItemData("Crisps", "50", "gr", "3", 1, 3);
-    this.setItemData("Chips", "80", "gr", "6.2", 0, 3);
+    this.setItemData("Sugar cubes", "100", "gr", "3.5", 0, 3);
+    this.setItemData("Wine", "750", "ml", "23", 0, 3);
+    this.setItemData("Flour", "1", "kg", "3.4", 1, 3);
+    this.setItemData("Crackers", "80", "gr", "6.2", 0, 3);
 
-    this.setItemData("Chocolate", "100", "gr", "3.5", 0, 4);
-    this.setItemData("Coca-cola", "2.5", "l", "4.5", 0, 4);
-    this.setItemData("Crisps", "50", "gr", "3", 1, 4);
-    this.setItemData("Chips", "80", "gr", "6.2", 0, 4);
+    this.setItemData("Cigarettes", "1", "pc", "9.3", 0, 4);
+    this.setItemData("Mineral water", "5", "l", "3.55", 0, 4);
+    this.setItemData("Salt", "50", "gr", "0.75", 1, 4);
+    this.setItemData("Sugar", "0.5", "kg", "2.2", 0, 4);
+    this.setItemData("Condiments pack", "1", "pkg", "23", 0, 4);
+
+    this.setItemData("Chocolate", "100", "gr", "3.5", 0, 5);
+    this.setItemData("Coca-cola", "2.5", "l", "4.5", 0, 5);
+    this.setItemData("Crisps", "50", "gr", "3", 1, 5);
+    this.setItemData("Chips", "80", "gr", "6.2", 0, 5);
+    this.setItemData("Meat", "1.5", "kg", "14.6", 1, 5);
+
+    this.setItemData("Cocoa", "100", "gr", "3.5", 0, 6);
+    this.setItemData("Beer", "2.5", "l", "4.5", 0, 6);
+    this.setItemData("Olives", "50", "gr", "3", 1, 6);
+    this.setItemData("Peanuts", "80", "gr", "6.2", 0, 6);
+    this.setItemData("Olive oil", "1", "l", "14.5", 0, 6);
+
+    this.setItemData("Sugar cubes", "1", "pkg", "3.5", 0, 7);
+    this.setItemData("Wine", "750", "ml", "23", 0, 7);
+    this.setItemData("Flour", "1", "kg", "3.4", 1, 7);
+    this.setItemData("Crackers", "80", "gr", "6.2", 0, 7);
+
+    this.setItemData("Cigarettes", "1", "pc", "9.3", 0, 8);
+    this.setItemData("Mineral water", "5", "l", "3.55", 0, 8);
+    this.setItemData("Salt", "50", "gr", "0.75", 1, 8);
+    this.setItemData("Sugar", "500", "gr", "2.2", 0, 8);
+    this.setItemData("Condiments pack", "1", "pkg", "23", 0, 8);
+
+    this.setItemData("Chocolate", "100", "gr", "3.5", 0, 9);
+    this.setItemData("Coca-cola", "2.5", "l", "4.5", 0, 9);
+    this.setItemData("Crisps", "50", "gr", "3", 1, 9);
+    this.setItemData("Chips", "80", "gr", "6.2", 0, 9);
+    this.setItemData("Meat", "800", "gr", "14.6", 1, 9);
+
+    this.setItemData("Cocoa", "100", "gr", "3.5", 0, 10);
+    this.setItemData("Beer", "2.5", "l", "4.5", 0, 10);
+    this.setItemData("Olives", "50", "gr", "3", 1, 10);
+    this.setItemData("Peanuts", "80", "gr", "6.2", 0, 10);
+    this.setItemData("Olive oil", "1", "l", "14.5", 0, 10);
+
+    this.setItemData("Sugar cubes", "100", "gr", "3.5", 0, 11);
+    this.setItemData("Wine", "750", "ml", "23", 0, 11);
+    this.setItemData("Flour", "1", "kg", "3.4", 1, 11);
+    this.setItemData("Crackers", "80", "gr", "6.2", 0, 11);
+
+    this.setItemData("Cigarettes", "1", "pc", "9.3", 0, 12);
+    this.setItemData("Mineral water", "5", "l", "3.55", 0, 12);
+    this.setItemData("Salt", "50", "gr", "0.75", 1, 12);
+    this.setItemData("Sugar", "500", "gr", "2.2", 0, 12);
+    this.setItemData("Condiments pack", "1", "pkg", "23", 0, 12);
 }
 
