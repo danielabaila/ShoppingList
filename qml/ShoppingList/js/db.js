@@ -394,7 +394,29 @@ DbManager.prototype.removeItemFromList = function(item_id) {
                      console.log("ERROR - could not delete item " + item_id);
                  }
              });
-    return true;
+    return res;
+}
+
+DbManager.prototype.removeList = function(list_id) {
+    var res;
+    this.db.transaction(
+             function(tx) {
+                 var rs = tx.executeSql('DELETE FROM lists WHERE list_id = ?;', [list_id]);
+                 if (rs.rowsAffected > 0) {
+                     res = "OK";
+                     var rs = tx.executeSql('DELETE FROM items WHERE item_list_id = ?;', [list_id]);
+                     if (rs.rowsAffected > 0) {
+                         res = "OK";
+                     } else {
+                         res = "error";
+                         console.log("ERROR - could not remove items in deleted list " + list_id);
+                     }
+                 } else {
+                     res = "error";
+                     console.log("ERROR - could not delete list " + list_id);
+                 }
+             });
+    return res;
 }
 
 

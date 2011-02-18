@@ -126,3 +126,9 @@ function checkItem(checked, item_id) {
     var res = dbManager.checkItem(checked, item_id);
     if (res == "error") return;
 }
+
+//Delete list
+function deleteList(list_id) {
+    var res = dbManager.removeList(list_id);
+    if (res == "error") return;
+}
