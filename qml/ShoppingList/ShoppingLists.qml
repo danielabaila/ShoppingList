@@ -29,10 +29,18 @@ Item {
          }
     }
 
+    ListModel {
+        id: shoppingListModel
+
+        Component.onCompleted: {
+            MainManager.generateListItemsModel(shoppingListModel);
+        }
+    }
+
     ListView {
         id: shoppingLists
         height: parent.height; width: parent.width
-        model: MainManager.generateListItemsModel();
+        model: shoppingListModel
         delegate: listSection
 
         states: [

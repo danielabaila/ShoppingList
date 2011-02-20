@@ -12,10 +12,8 @@ function init() {
 
 
 // Generate dynamic Lists data model
-function generateListItemsModel() {
-    var qmlObjectString = 'import QtQuick 1.0;';
-    qmlObjectString += 'ListModel {';
-
+function generateListItemsModel(model) {
+    var obj = new Object();
 
     var res = dbManager.getLists();
     if (res == "error") {
@@ -23,19 +21,19 @@ function generateListItemsModel() {
     }
 
     for(var i = 0; i < res.rows.length; i++) {
-        qmlObjectString += 'ListElement {';
-        qmlObjectString += 'itemId: "'        + res.rows.item(i).list_id + '" ; ';
-        qmlObjectString += 'itemName: "'      + res.rows.item(i).list_name + '"; ';
-        qmlObjectString += 'itemLocation: "'  + res.rows.item(i).list_location + '"; ';
-        qmlObjectString += 'itemIcon: "'      + res.rows.item(i).icon_path + '"; ';
-        qmlObjectString += 'itemPrice: "'     + ' 100 ' + '"; ';
-        qmlObjectString += 'itemCurrency: "'  + res.rows.item(i).currency + '"; ';
-        qmlObjectString += 'itemTimestamp: "' + res.rows.item(i).list_timestamp + '"; ';
-        qmlObjectString += '}';
-    }
-    qmlObjectString += '}';
+        obj.itemIndex =  i;
+        obj.itemId =  res.rows.item(i).list_id;
+        obj.itemName =  res.rows.item(i).list_name;
+        obj.itemLocation =  res.rows.item(i).list_location;
+        obj.itemIcon =  res.rows.item(i).icon_path;
+        obj.itemPrice =  "100";
+        obj.itemCurrency =  res.rows.item(i).currency;
+        obj.itemTimestamp =  res.rows.item(i).list_timestamp;
 
-    return Qt.createQmlObject(qmlObjectString, shoppingLists, "dynamicLists");
+        model.append(obj);
+        obj = {};
+    }
+    return;
 }
 
 
